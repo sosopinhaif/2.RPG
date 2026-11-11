@@ -31,14 +31,9 @@ def carregar_json(caminho, padrao=None):
     
     os.path.exists(caminho) 
     
+def salvar_json(caminho, dados):
+     """Grava os dados no arquivo JSON (apaga o conteúdo antigo)."""
+
     with open("catalo_json", "w", encoding="utf-8") as arquivo:
         json.dump(dados, arquivo, ensure_ascii=False, indent=2)
     
-     # TODO
-    raise NotImplementedError
-
-
-def salvar_json(caminho, dados):
-    """Grava os dados no arquivo JSON (apaga o conteúdo antigo)."""
-    # TODO
-    raise NotImplementedError
