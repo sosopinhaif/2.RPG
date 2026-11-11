@@ -60,9 +60,9 @@ def barra_de_vida(vida, vida_max, tamanho=10):
     Use um laço for com range(tamanho)."""
 
     quant_hash = vida * tamanho // vida_max
-    quant_traco = vida * tamanho % vida_max
+    quant_traco = tamanho - quant_hash
 
-    barra = (quant_hash * "#") + (quant_traco + "-")
+    barra = "[" + (quant_hash * "#") + (quant_traco * "-") + "]"
 
     return (barra)
 
@@ -91,10 +91,7 @@ def ler_acao():
         1 - Atacar   2 - Tomar poção   3 - Fugir
     Se digitar outra coisa, mostre "Ação inválida!" e pergunte de novo."""
     while True:
-     acao = input("qual opçao voce escolhe? \n",
-          "(1)- atacar\n",
-          "(2)- tomar poçao\n",
-          "(3)- fugir\n")
+     acao = input("qual opçao voce escolhe? \n(1)- atacar (2)- tomar poçao (3)- fugir \n digite: ")
 
      if acao == "1" or acao == "2" or acao == "3":
             return acao
@@ -117,20 +114,56 @@ def batalha(heroi, inimigo, pocoes=3):
 
         acao = ler_acao()
         if acao == "1":
+
+          critico = random.randint(1, 10) == 10
+          dano = calcular_dano (heroi["ataque"] , inimigo["defesa"] , critico)
+                   
+          if critico == 10:
+             critico= True
+             print(f"incrivel!!! seu dano foi critico ,você teve um dano de {dano}")
+
+          else:
+            critico == False
+            print(f"Vishhh, nao foi sua hora de arrasar, você teve  um dano de {dano}")   
+
+          inimigo['vida'] = aplicar_dano(inimigo['vida'], dano)
+
+          if inimigo["vida"] < 0:
+             print("ele ainda esta vivo!!! \n")
+             print(inimigo['nome'] , 'vai atacar agora!\n')
+
+             dano = calcular_dano (inimigo["ataque"] , heroi["defesa"] )
+
+             heroi['vida'] = aplicar_dano(heroi['vida'], dano)
+             print(f"{inimigo['nome']} te deu {dano} de dano!!")
+          else:
+             print(f'voce matoub o {inimigo['nome']} , parabens!!!')      
+
+            
             # TODO: 1) sorteie o crítico:  critico = random.randint(1, 10) == 10
             #       2) calcule o dano com calcular_dano(ataque do herói, defesa do inimigo, critico)
             #       3) atualize a vida do inimigo com aplicar_dano
             #       4) mostre quanto de dano foi causado (avise se foi crítico)
-            pass
+            
         elif acao == "2":
-            # TODO: se ainda houver poções: diminua 1, cure o herói com curar() e avise
+            if pocoes  >  0 :
+                pocoes = pocoes - 1
+
+            else :
+                print("voce nao possui mais pocoes!")    
+
+            heroi['vida'] == curar(heroi['vida'], heroi['vida_max'])
+             # TODO: se ainda houver poções: diminua 1, cure o herói com curar() e avise
             #       quantas restam. Se não houver: mostre "Você não tem mais poções!"
-            pass
+            
         else:
+            print("voce foi embora!")
+
+            return{'resultado': 'fuga' , 'turno': turno, 'vida_restante': heroi['vida'], 'pocoes': pocoes}
+            
             # TODO: mostre que o herói fugiu e devolva (return) o dicionário com
             #       "resultado": "fuga" (veja o formato no início desta função)
-            pass
-
+        
         # TODO: se o inimigo ainda estiver vivo, ele ataca o herói
         #       (dano = calcular_dano(ataque do inimigo, defesa do herói), sem crítico)
 
@@ -139,10 +172,9 @@ def batalha(heroi, inimigo, pocoes=3):
     else:
         resultado = "derrota"
     print("\n" + classificar_resultado(heroi["vida"], heroi["vida_max"]) + "!")
-    return {"resultado": resultado, "turnos": turno,
-            "vida_restante": heroi["vida"], "pocoes": pocoes}
-
-
+   
+    return{'resultado': resultado , 'turno': turno, 'vida_restante': heroi['vida'], 'pocoes': pocoes}
+    
 # Este bloco só roda quando executamos ESTE arquivo (python batalha.py).
 # Quando outro arquivo faz "import batalha", ele NÃO roda.
 if __name__ == "__main__":

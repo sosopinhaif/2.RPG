@@ -19,7 +19,22 @@ import os
 def carregar_json(caminho, padrao=None):
     """Lê o arquivo JSON e devolve os dados.
     Se o arquivo não existir, devolve o valor 'padrao'."""
-    # TODO
+    os.path.exists(caminho)     
+    
+    if caminho:
+        with open("catalogo.json", "r", encoding="utf-8") as arquivo:
+            dados = json.load(arquivo)
+            return (dados)
+    
+    else:
+        return(padrao)
+    
+    os.path.exists(caminho) 
+    
+    with open("catalo_json", "w", encoding="utf-8") as arquivo:
+        json.dump(dados, arquivo, ensure_ascii=False, indent=2)
+    
+     # TODO
     raise NotImplementedError
 
 
