@@ -1,3 +1,4 @@
+
 """
 loja.py - Regras da loja do jogo.
 
@@ -17,14 +18,18 @@ def buscar_item(catalogo, nome):
     Devolve o dicionário do item, ou None se não achar.
     Dica: percorra o catálogo com for e compare item["nome"].lower() com nome.lower()"""
     # TODO
-    raise NotImplementedError
-
+    for item in catalogo:
+        if item["nome".lower() == nome.lower()]:
+            return item
+    return None
 
 def mostrar_catalogo(catalogo):
     """Mostra os itens da loja, numerados a partir de 1, por exemplo:
         1. Poção de Vida      Poção       15 moedas"""
     # TODO
-    raise NotImplementedError
+    for i, itens in enumerate (catalogo, start=1):
+           print(f"{i}. {itens['nome']}      {itens['tipo']}       {itens['preco']} moedas")
+        
 
 
 def mostrar_inventario(heroi):
@@ -51,7 +56,26 @@ def comprar(heroi, catalogo, nome, quantidade=1):
       6. Devolva f"Comprou {quantidade} x {item['nome']} por {custo} moedas."
     """
     # TODO
-    raise NotImplementedError
+    for item in catalogo:
+        if item["nome"].lower() != nome.lower():
+            print("Esse item não existe")
+        
+        else:
+            buscar_item(catalogo, nome)
+
+        if item["quantidade"] < quantidade:
+            print("Quantidade invalida")
+
+        Custo = item["preco"] * item["quantidade"]
+        if(heroi['ouro'] < Custo):
+            print(f"Ouro insuficiente: item custa{Custo} e você tem {heroi['ouro']}")
+        heroi['ouro'] = heroi['ouro'] - Custo
+        if item["nome"] not in heroi['inventario']:
+            heroi['inventario'][item['nome']] = 0
+        heroi["inventario"][item['nome']] += quantidade
+        return (f"Comprou {quantidade} x {item['nome']} por {Custo} moedas.")
+    
+
 
 
 def vender(heroi, catalogo, nome, quantidade=1):
@@ -67,4 +91,14 @@ def vender(heroi, catalogo, nome, quantidade=1):
     Dica: heroi["inventario"].get(item["nome"], 0) dá 0 se o herói não tiver o item.
     """
     # TODO
-    raise NotImplementedError
+    
+    for item in catalogo:
+        valor = (item["preco"] * item["quantidade"]) //2
+        if (item['nome'].lower() != nome.lower()):
+            print("Esse item não existe")
+            heroi["inventario"].get(item["nome"], 0)
+        if quantidade < 1 or quantidade > heroi['inventario']:
+            print(f"Você só tem {item} x {item['nome']}.")
+        if heroi['inventario'] == 0:
+             del heroi["inventario"][item["nome"]]
+        return f"Vendeu {quantidade} x {item['nome']} por {valor} moedas."

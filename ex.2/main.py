@@ -1,3 +1,4 @@
+
 """
 main.py - Exercício 2: loja do jogo.
 
